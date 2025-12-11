@@ -2,20 +2,27 @@
 
 import {themes as prismThemes} from 'prism-react-renderer';
 
+/** Detect environment: Vercel sets process.env.VERCEL = '1' during build */
+const isVercel = !!process.env.VERCEL;
+
+/** Replace with your Vercel domain exactly as shown in Vercel dashboard */
+const VERCEL_URL = 'https://physical-ai-book-czbd.vercel.app';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Physical AI',
   tagline: 'The Comprehensive Guide to Embodied Intelligence',
   favicon: 'img/favicon.ico',
 
-  // ⭐ REQUIRED FOR GITHUB PAGES
-  url: 'https://unzii98.github.io',
-  baseUrl: '/physical-ai-book/',
+  // url + baseUrl now switch depending on environment
+  url: isVercel ? VERCEL_URL : 'https://unzii98.github.io',
+  baseUrl: isVercel ? '/' : '/physical-ai-book/',
 
-  // ⭐ GITHUB USER + REPO NAME (MUST BE EXACT)
-  organizationName: 'unzii98',       // GitHub username
-  projectName: 'physical-ai-book',   // Repo name
+  // GitHub info can remain (useful if you still push to GitHub Pages)
+  organizationName: 'unzii98',
+  projectName: 'physical-ai-book',
 
+  // during CI builds you may prefer warn to avoid failing the build for small issues
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
