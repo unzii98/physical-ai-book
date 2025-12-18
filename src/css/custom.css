@@ -16,6 +16,17 @@
   --ifm-color-primary-lighter: #93c5fd;  /* Blue-300 */
   --ifm-color-primary-lightest: #dbeafe; /* Blue-100 */
 
+  /* RGB form for rgba() helpers */
+  --ifm-color-primary-rgb: 59, 130, 246; /* rgb(59,130,246) for #3b82f6 */
+
+  /* Emphasis (text) fallbacks */
+  --ifm-color-emphasis-900: #0f172a; /* dark text */
+  --ifm-color-emphasis-700: #334155;
+  --ifm-color-emphasis-600: #475569;
+  --ifm-color-emphasis-400: #94a3b8;
+  --ifm-color-emphasis-100: #f1f5f9;
+  --ifm-color-emphasis-300: #cbd5e1;
+
   /* Light Mode Backgrounds */
   --ifm-background-color: #f8fafc;       /* Slate-50 */
   --ifm-background-surface-color: #ffffff;
@@ -53,6 +64,9 @@
   --ifm-color-primary-lighter: #bfdbfe;
   --ifm-color-primary-lightest: #dbeafe;
 
+  /* RGB form for dark theme primary — keep same rgb so rgba still works */
+  --ifm-color-primary-rgb: 96, 165, 250;
+
   /* Dark Mode Backgrounds - Deep Slate/Black */
   --ifm-background-color: #0f172a;       /* Slate-900 */
   --ifm-background-surface-color: #1e293b; /* Slate-800 */
@@ -74,6 +88,7 @@ body {
   background-image: var(--glass-gradient-1), var(--glass-gradient-2);
   background-attachment: fixed;
   background-size: cover;
+  font-family: var(--ifm-font-family-base);
 }
 
 /* Typography Improvements */
@@ -114,7 +129,7 @@ p {
 }
 
 .navbar__item:hover {
-  background: rgba(var(--ifm-color-primary-rgb), 0.1);
+  background: rgba(var(--ifm-color-primary-rgb), 0.08);
   color: var(--ifm-color-primary);
 }
 
@@ -187,11 +202,15 @@ p {
 /* -------------------------------------------------------------------------- */
 /*                                  Sidebar                                   */
 /* -------------------------------------------------------------------------- */
-.theme-doc-sidebar-container {
+/* Container styling */
+.theme-doc-sidebar-container,
+.theme-doc-sidebar {
   border-right: 1px solid var(--glass-border);
   background: transparent; /* Let body gradients show through */
+  z-index: 2000; /* keep above content when open */
 }
 
+/* Menu links */
 .menu__link {
   border-radius: 8px;
   padding: 0.6rem 1rem;
@@ -200,16 +219,69 @@ p {
 }
 
 .menu__link:hover {
-  background: rgba(var(--ifm-color-primary-rgb), 0.1);
+  background: rgba(var(--ifm-color-primary-rgb), 0.08);
   transform: translateX(4px);
 }
 
 .menu__link--active {
-  background: linear-gradient(90deg, rgba(var(--ifm-color-primary-rgb), 0.15) 0%, transparent 100%);
+  background: linear-gradient(90deg, rgba(var(--ifm-color-primary-rgb), 0.12) 0%, transparent 100%);
   color: var(--ifm-color-primary);
   border-left: 3px solid var(--ifm-color-primary);
   border-radius: 4px 8px 8px 4px; /* Sharper left edge */
 }
+
+/* -------------------------------------------------------------------------- */
+/*                MOBILE: hide sidebar by default, allow open toggle          */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* hide by translating off-screen */
+  .theme-doc-sidebar,
+  .theme-doc-sidebar-container {
+    transform: translateX(-105%) !important;
+    transition: transform 300ms ease !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80%; /* width of mobile sidebar */
+    max-width: 360px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+
+  /* when Docusaurus (or theme) opens sidebar it may add an --open or --is-open class.
+     Support common variants so the toggle will reveal the panel. */
+  .theme-doc-sidebar--open,
+  .theme-doc-sidebar.is-open,
+  .theme-doc-sidebar[aria-hidden="false"],
+  .theme-doc-sidebar-container.theme-doc-sidebar--open,
+  .theme-doc-sidebar-container.is-open {
+    transform: translateX(0) !important;
+  }
+
+  /* overlay behind sidebar to dim background and capture clicks */
+  .custom-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1998;
+    pointer-events: auto;
+  }
+
+  /* Ensure main content is beneath */
+  .main-wrapper,
+  .main {
+    z-index: 0;
+    position: relative;
+  }
+}
+
+/* If you want the overlay element to be present by default (hidden),
+   you can create it in the DOM next to sidebar and add/remove `.custom-sidebar-overlay`
+   when sidebar opens via JS. Docusaurus may already handle overlay; above is just styling. */
 
 /* -------------------------------------------------------------------------- */
 /*                                  Buttons                                   */
