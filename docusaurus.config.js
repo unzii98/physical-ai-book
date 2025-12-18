@@ -68,15 +68,17 @@ const config = {
           position: 'left',
           label: 'Book',
         },
+
         {to: '/about', label: 'About', position: 'left'},
-        {to: '/contact', label: 'Contact', position: 'left'},
-        {to: '/signin', label: 'Sign In', position: 'right'},
-          {
+            {
   href: 'https://github.com/unzii98/physical-ai-book',
   position: 'right',
   className: 'header-github-link',
   'aria-label': 'GitHub repository',
 },
+        {to: '/contact', label: 'Contact', position: 'left'},
+        {to: '/signin', label: 'Sign In', position: 'right'},
+      
 
       ],
     },
